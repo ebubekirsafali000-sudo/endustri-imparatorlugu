@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import '../styles/game.css';
 
-import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE } from '../data/gameData';
+import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE, CONTRACTS, EXPEDITIONS } from '../data/gameData';
 import { makeDefault, doSave, doLoad, GameState } from '../utils/gameState';
-import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige } from '../utils/gameLogic';
+import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige, completeContract, completeExpedition } from '../utils/gameLogic';
 import { fmtNum, fmtRate, XP_PER_LEVEL } from '../utils/formatters';
 
 export default function Game() {
@@ -93,7 +93,7 @@ export default function Game() {
       </header>
 
       <nav className="game-tabs">
-        {['buildings', 'research', 'resources', 'settings'].map(t => (
+        {['buildings', 'research', 'resources', 'contracts', 'settings'].map(t => (
           <button
             key={t}
             className={`tab ${tab === t ? 'active' : ''}`}
@@ -102,6 +102,7 @@ export default function Game() {
             {t === 'buildings' && '🏗️ Binalar'}
             {t === 'research' && '🔬 Araştırma'}
             {t === 'resources' && '📦 Kaynaklar'}
+            {t === 'contracts' && '📋 Sözleşmeler'}
             {t === 'settings' && '⚙️ Ayarlar'}
           </button>
         ))}
@@ -206,6 +207,62 @@ export default function Game() {
                   <span className="resource-value">{fmtNum(amount)}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {tab === 'contracts' && (
+          <div className="contracts-tab">
+            <h2>📋 Sözleşmeler & Keşifler</h2>
+            <div className="contracts-section">
+              <h3>Sözleşmeler</h3>
+              <div className="contracts-grid">
+                {CONTRACTS.filter(c => c.zone <= s.zone).map(c => {
+                  const done = (s.contractsCompleted || []).includes(c.id);
+                  return (
+                    <div key={c.id} className={`contract-card ${done ? 'done' : ''}`}>
+                      <div className="contract-icon">{c.icon}</div>
+                      <div className="contract-name">{c.name}</div>
+                      <div className="contract-desc">{c.desc}</div>
+                      <div className="contract-reward">{fmtNum(c.reward)} TL</div>
+                      {!done && (
+                        <button className="complete-btn" onClick={() => {
+                          if (completeContract(s, c.id, c.reward)) {
+                            setTick(t => t + 1);
+                          }
+                        }}>Tamamla</button>
+                      )}
+                      {done && <div className="contract-status">✓ Tamamlandı</div>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="expeditions-section">
+              <h3>Keşifler</h3>
+              <div className="expeditions-grid">
+                {EXPEDITIONS.filter(e => e.zone <= s.zone).map(e => {
+                  const done = (s.expeditionsCompleted || []).includes(e.id);
+                  return (
+                    <div key={e.id} className={`expedition-card ${done ? 'done' : ''}`}>
+                      <div className="expedition-icon">{e.icon}</div>
+                      <div className="expedition-name">{e.name}</div>
+                      <div className="expedition-desc">{e.desc}</div>
+                      <div className="expedition-chance">{Math.round(e.chance * 100)}% şans</div>
+                      {!done && (
+                        <button className="explore-btn" onClick={() => {
+                          if (completeExpedition(s, e.id, e.reward, e.chance)) {
+                            setTick(t => t + 1);
+                          } else {
+                            setTick(t => t + 1);
+                          }
+                        }}>Keşfet</button>
+                      )}
+                      {done && <div className="expedition-status">✓ Tamamlandı</div>}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}

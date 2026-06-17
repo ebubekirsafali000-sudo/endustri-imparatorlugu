@@ -22,6 +22,8 @@ export interface GameState {
   messages: Array<{ id: number; type: string; text: string; time: string }>;
   prestigeCount?: number;
   prestigeBonus?: number;
+  contractsCompleted?: string[];
+  expeditionsCompleted?: string[];
 }
 
 const SAVE_KEY = 'endInc_v6';
@@ -67,6 +69,8 @@ export function makeDefault(diff: string = 'normal'): GameState {
     ],
     prestigeCount: 0,
     prestigeBonus: 1,
+    contractsCompleted: [],
+    expeditionsCompleted: [],
   };
 }
 

@@ -166,3 +166,21 @@ export function doPrestige(s: GameState, makeDefault: any) {
   newState.prestigeBonus = prestigeBonus;
   return newState;
 }
+
+
+export function completeContract(s: GameState, contractId: string, reward: number): boolean {
+  if ((s.contractsCompleted || []).includes(contractId)) return false;
+  s.money += reward;
+  s.contractsCompleted = [...(s.contractsCompleted || []), contractId];
+  return true;
+}
+
+export function completeExpedition(s: GameState, expeditionId: string, reward: number, chance: number): boolean {
+  if ((s.expeditionsCompleted || []).includes(expeditionId)) return false;
+  if (Math.random() < chance) {
+    s.money += reward;
+    s.expeditionsCompleted = [...(s.expeditionsCompleted || []), expeditionId];
+    return true;
+  }
+  return false;
+}

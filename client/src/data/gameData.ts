@@ -59,6 +59,13 @@ export const ALL_BUILDINGS: Building[] = [
   { id: 'nukleer_reaktor', zone: 2, icon: '☢️', name: 'Nükleer Reaktör', cost: 5000, workers: 4, energyUse: 0, energyProd: 40, inputs: [], output: '', rate: 0, desc: 'Nükleer dev enerji', workerWage: 50 },
   { id: 'tersane', zone: 2, icon: '🚢', name: 'Tersane', cost: 2800, workers: 4, energyUse: 4, energyProd: 0, inputs: ['tahta', 2, 'celik', 1], output: 'lojistik', rate: 0.6, desc: 'Gemi üretir', workerWage: 28 },
   { id: 'finans_merkezi', zone: 2, icon: '🏦', name: 'Finans Merkezi', cost: 3500, workers: 3, energyUse: 2, energyProd: 0, inputs: ['altin', 0.1], output: 'TL', rate: 500, desc: 'Altın yatırımı', workerWage: 45 },
+  // ZONE 3
+  { id: 'uydu_fab', zone: 3, icon: '🛸', name: 'Uydu Fabrikası', cost: 3000, workers: 5, energyUse: 10, energyProd: 0, inputs: ['celik', 20, 'kablo', 10], output: 'uydu', rate: 0.05, desc: 'Uydu üretir', workerWage: 80 },
+  { id: 'roket_silosu', zone: 3, icon: '🚀', name: 'Roket Silosu', cost: 5000, workers: 8, energyUse: 15, energyProd: 0, inputs: ['celik', 50, 'kablo', 20], output: 'roket', rate: 0.02, desc: 'Roket üretir', workerWage: 120 },
+  { id: 'yorunge_ist', zone: 3, icon: '🛰️', name: 'Yörünge İstasyonu', cost: 4000, workers: 4, energyUse: 8, energyProd: 0, inputs: [], output: 'RP', rate: 5, desc: 'RP üretir', workerWage: 100 },
+  { id: 'fuzyon_reaktoru', zone: 3, icon: '💥', name: 'Füzyon Reaktörü', cost: 8000, workers: 3, energyUse: 0, energyProd: 200, inputs: ['helyum3', 0.5], output: '', rate: 0, desc: 'Dev enerji üretir', workerWage: 150 },
+  { id: 'orbital_solar', zone: 3, icon: '🌞', name: 'Orbital Güneş', cost: 12000, workers: 4, energyUse: 0, energyProd: 350, inputs: [], output: '', rate: 0, desc: 'Yörüngeden güneş enerjisi', workerWage: 200 },
+  { id: 'uzay_ihale', zone: 3, icon: '🌌', name: 'Uzay İhale Merkezi', cost: 7000, workers: 6, energyUse: 8, energyProd: 0, inputs: ['uydu', 0.1], output: 'TL', rate: 1000, desc: 'Para üretir', workerWage: 110 },
 ];
 
 export const RESEARCH_TREE = [
@@ -85,3 +92,37 @@ export const EFFECT_META: Record<string, { color: string; label: string }> = {
   rpMulti: { color: '#ff00ff', label: 'Araştırma' },
   none: { color: '#00d4ff', label: '' },
 };
+
+
+export interface Contract {
+  id: string;
+  name: string;
+  desc: string;
+  reward: number;
+  icon: string;
+  zone: number;
+}
+
+export interface Expedition {
+  id: string;
+  name: string;
+  desc: string;
+  reward: number;
+  chance: number;
+  icon: string;
+  zone: number;
+}
+
+export const CONTRACTS: Contract[] = [
+  { id: 'c1', name: 'Demir Siparişi', desc: '500 Demir Gönder', reward: 5000, icon: '📦', zone: 1 },
+  { id: 'c2', name: 'Çelik Üretimi', desc: '100 Çelik Gönder', reward: 8000, icon: '🏗️', zone: 1 },
+  { id: 'c3', name: 'Lojistik Ağı', desc: '50 Lojistik Gönder', reward: 15000, icon: '🚚', zone: 2 },
+  { id: 'c4', name: 'Plastik Taşıması', desc: '75 Plastik Gönder', reward: 20000, icon: '🧪', zone: 2 },
+];
+
+export const EXPEDITIONS: Expedition[] = [
+  { id: 'e1', name: 'Yerel Keşif', desc: '%50 şansla 2000 TL', reward: 2000, chance: 0.5, icon: '🗺️', zone: 1 },
+  { id: 'e2', name: 'Uzak Keşif', desc: '%30 şansla 8000 TL', reward: 8000, chance: 0.3, icon: '🧭', zone: 1 },
+  { id: 'e3', name: 'Deniz Yolculuğu', desc: '%40 şansla 15000 TL', reward: 15000, chance: 0.4, icon: '⛵', zone: 2 },
+  { id: 'e4', name: 'Hazine Avı', desc: '%25 şansla 50000 TL', reward: 50000, chance: 0.25, icon: '💎', zone: 2 },
+];

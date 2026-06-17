@@ -424,3 +424,103 @@ h2 {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(168, 85, 247, 0.15));
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
 }
+
+
+/* Contracts & Expeditions */
+.contracts-section,
+.expeditions-section {
+  margin-bottom: 20px;
+}
+
+.contracts-section h3,
+.expeditions-section h3 {
+  color: #ffd700;
+  font-size: 13px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contracts-grid,
+.expeditions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.contract-card,
+.expedition-card {
+  background: rgba(28, 35, 48, 0.8);
+  border: 1px solid #2a3f55;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.contract-card:hover:not(.done),
+.expedition-card:hover:not(.done) {
+  border-color: #ffd700;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+.contract-card.done,
+.expedition-card.done {
+  border-color: #39ff14;
+  background: rgba(57, 255, 20, 0.1);
+}
+
+.contract-icon,
+.expedition-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.contract-name,
+.expedition-name {
+  font-weight: 700;
+  color: #ffd700;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.contract-desc,
+.expedition-desc {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.contract-reward,
+.expedition-chance {
+  font-size: 11px;
+  color: #00d4ff;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.complete-btn,
+.explore-btn {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.complete-btn:hover,
+.explore-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.contract-status,
+.expedition-status {
+  font-size: 11px;
+  color: #39ff14;
+  font-weight: 700;
+}
