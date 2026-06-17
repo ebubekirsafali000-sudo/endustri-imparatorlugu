@@ -146,3 +146,23 @@ export function unlockResearch(s: GameState, researchId: string): boolean {
 
   return true;
 }
+
+
+export function checkZoneAdvance(s: GameState): boolean {
+  if (s.zone >= 8) return false;
+  const nextZone = s.zone + 1;
+  const levelReq = nextZone * 10;
+  if (s.level >= levelReq) {
+    s.zone = nextZone;
+    return true;
+  }
+  return false;
+}
+
+export function doPrestige(s: GameState, makeDefault: any) {
+  const prestigeBonus = 1 + (s.zone - 1) * 0.1;
+  const newState = makeDefault(s.difficulty);
+  newState.prestigeCount = (s.prestigeCount || 0) + 1;
+  newState.prestigeBonus = prestigeBonus;
+  return newState;
+}

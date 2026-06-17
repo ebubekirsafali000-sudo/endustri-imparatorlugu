@@ -3,7 +3,7 @@ import '../styles/game.css';
 
 import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE } from '../data/gameData';
 import { makeDefault, doSave, doLoad, GameState } from '../utils/gameState';
-import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch } from '../utils/gameLogic';
+import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige } from '../utils/gameLogic';
 import { fmtNum, fmtRate, XP_PER_LEVEL } from '../utils/formatters';
 
 export default function Game() {
@@ -239,6 +239,26 @@ export default function Game() {
               <div className="setting-item">
                 <span>Araştırmalar: {s.researchUnlocked.length}</span>
               </div>
+            </div>
+            <div className="settings-section">
+              <h3>Prestige</h3>
+              <div className="setting-item">
+                <span>Prestige Sayısı: {s.prestigeCount || 0}</span>
+              </div>
+              <div className="setting-item">
+                <span>Prestige Bonusu: ×{(s.prestigeBonus || 1).toFixed(2)}</span>
+              </div>
+              {s.zone >= 2 && (
+                <button className="prestige-btn" onClick={() => {
+                  if (confirm(`Prestige yap? (${(s.zone - 1) * 10}% bonus kazanacaksın)`)) {
+                    sr.current = doPrestige(s, makeDefault);
+                    doSave(sr.current);
+                    setTick(t => t + 1);
+                  }
+                }}>
+                  ✨ Prestige Yap
+                </button>
+              )}
             </div>
             <div className="settings-section">
               <button className="reset-btn" onClick={handleReset}>

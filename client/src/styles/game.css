@@ -405,3 +405,22 @@ h2 {
   margin-bottom: 14px;
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
 }
+
+
+.prestige-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #a855f7;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.05));
+  color: #a855f7;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.prestige-btn:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(168, 85, 247, 0.15));
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}

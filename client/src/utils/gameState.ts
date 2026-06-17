@@ -20,6 +20,8 @@ export interface GameState {
   researchUnlocked: string[];
   difficulty: string;
   messages: Array<{ id: number; type: string; text: string; time: string }>;
+  prestigeCount?: number;
+  prestigeBonus?: number;
 }
 
 const SAVE_KEY = 'endInc_v6';
@@ -63,6 +65,8 @@ export function makeDefault(diff: string = 'normal'): GameState {
         time: new Date().toLocaleTimeString('tr-TR'),
       },
     ],
+    prestigeCount: 0,
+    prestigeBonus: 1,
   };
 }
 
