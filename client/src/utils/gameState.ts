@@ -25,6 +25,8 @@ export interface GameState {
   contractsCompleted?: string[];
   expeditionsCompleted?: string[];
   achievementsUnlocked?: string[];
+  theme?: string;
+  soundEnabled?: boolean;
 }
 
 const SAVE_KEY = 'endInc_v6';
@@ -73,6 +75,8 @@ export function makeDefault(diff: string = 'normal'): GameState {
     contractsCompleted: [],
     expeditionsCompleted: [],
     achievementsUnlocked: [],
+    theme: 'dark',
+    soundEnabled: true,
   };
 }
 
@@ -91,4 +95,17 @@ export function doLoad(): GameState | null {
   } catch {
     return null;
   }
+}
+
+
+export function toggleTheme(s: GameState): void {
+  const themes = ['light', 'dark', 'auto'];
+  const currentIndex = themes.indexOf(s.theme || 'dark');
+  const nextIndex = (currentIndex + 1) % themes.length;
+  s.theme = themes[nextIndex];
+  doSave(s);
+}
+
+export function getTheme(s: GameState): string {
+  return s.theme || 'dark';
 }

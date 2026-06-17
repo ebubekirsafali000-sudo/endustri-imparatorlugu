@@ -339,6 +339,26 @@ export default function Game() {
               )}
             </div>
             <div className="settings-section">
+              <h3>Tercihler</h3>
+              <button className="theme-btn" onClick={() => {
+                const themes = ['dark', 'light'];
+                const current = s.theme || 'dark';
+                const idx = themes.indexOf(current);
+                s.theme = themes[(idx + 1) % themes.length];
+                doSave(s);
+                setTick(t => t + 1);
+              }}>
+                {s.theme === 'light' ? '🌙 Koyu Tema' : '☀️ Açık Tema'}
+              </button>
+              <button className="sound-btn" onClick={() => {
+                s.soundEnabled = !s.soundEnabled;
+                doSave(s);
+                setTick(t => t + 1);
+              }}>
+                {s.soundEnabled ? '🔊 Sesi Kapat' : '🔇 Sesi Aç'}
+              </button>
+            </div>
+            <div className="settings-section">
               <button className="reset-btn" onClick={handleReset}>
                 🔄 Oyunu Sıfırla
               </button>
