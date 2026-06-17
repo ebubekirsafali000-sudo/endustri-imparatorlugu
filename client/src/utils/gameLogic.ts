@@ -24,7 +24,15 @@ export function getMarketPrice(s: GameState, res: string): number {
 }
 
 export function getActiveEventMultipliers(s: GameState) {
-  return { prod: 1, wage: 1, xp: 1, rp: 1, stopProd: false };
+  let prod = 1, wage = 1, xp = 1, rp = 1;
+  
+  if (s.activeEvent && s.activeEvent.endTime > Date.now()) {
+    if (s.activeEvent.id === 'event_double_money') prod = 2;
+    if (s.activeEvent.id === 'event_triple_xp') xp = 3;
+    if (s.activeEvent.id === 'event_production_boost') prod = 2;
+  }
+  
+  return { prod, wage, xp, rp, stopProd: false };
 }
 
 export function calculateGameTick(s: GameState, deltaTime: number = 1) {

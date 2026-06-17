@@ -151,3 +151,29 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'a_1m_money', name: 'Milyoner', desc: '1 milyon TL kazan', icon: '💰', reward: 20000, condition: 'money_1m' },
   { id: 'a_all_research', name: 'Bilim Ustası', desc: 'Tüm araştırmaları yap', icon: '🔬', reward: 15000, condition: 'all_research' },
 ];
+
+
+// Leaderboard types
+export const LEADERBOARD_TYPES = {
+  money: { label: 'Para', icon: '💰' },
+  level: { label: 'Seviye', icon: '📊' },
+  prestige: { label: 'Prestige', icon: '✨' },
+  totalBuildings: { label: 'Toplam Bina', icon: '🏭' },
+  playTime: { label: 'Oynama Süresi', icon: '⏱️' },
+};
+
+// Special events (random bonuses)
+export const SPECIAL_EVENTS = [
+  { id: 'event_double_money', name: '💰 2x Para', bonus: { money: 2 }, duration: 300, chance: 0.01 },
+  { id: 'event_triple_xp', name: '📈 3x XP', bonus: { xp: 3 }, duration: 300, chance: 0.01 },
+  { id: 'event_free_energy', name: '⚡ Sınırsız Enerji', bonus: { energy: 999 }, duration: 120, chance: 0.005 },
+  { id: 'event_production_boost', name: '🏭 2x Üretim', bonus: { production: 2 }, duration: 180, chance: 0.015 },
+];
+
+// Zone 6+ buildings
+export const ZONE_6_BUILDINGS: Building[] = [
+  { id: 'dyson_sphere', zone: 6, icon: '⭐', name: 'Dyson Küre', cost: 1000000, workers: 100, energyUse: 0, energyProd: 10000, inputs: [], output: '', rate: 0, desc: 'Yıldız enerjisinin %100\'ü', workerWage: 10000 },
+  { id: 'matter_converter', zone: 6, icon: '⚛️', name: 'Madde Dönüştürücü', cost: 500000, workers: 50, energyUse: 1000, energyProd: 0, inputs: [], output: 'TL', rate: 50000, desc: 'Maddeyi paraya dönüştür', workerWage: 5000 },
+  { id: 'time_manipulator', zone: 7, icon: '⏰', name: 'Zaman Manipülatörü', cost: 10000000, workers: 200, energyUse: 5000, energyProd: 0, inputs: [], output: 'TL', rate: 1000000, desc: 'Zamanı kontrol et', workerWage: 50000 },
+  { id: 'universe_factory', zone: 8, icon: '🌌', name: 'Evren Fabrikası', cost: 100000000, workers: 500, energyUse: 10000, energyProd: 0, inputs: [], output: 'TL', rate: 10000000, desc: 'Evrenleri üret', workerWage: 100000 },
+];
