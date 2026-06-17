@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import '../styles/game.css';
 
-import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE, CONTRACTS, EXPEDITIONS } from '../data/gameData';
+import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE, CONTRACTS, EXPEDITIONS, ACHIEVEMENTS } from '../data/gameData';
 import { makeDefault, doSave, doLoad, GameState } from '../utils/gameState';
-import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige, completeContract, completeExpedition } from '../utils/gameLogic';
+import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige, completeContract, completeExpedition, unlockAchievements } from '../utils/gameLogic';
 import { fmtNum, fmtRate, XP_PER_LEVEL } from '../utils/formatters';
 
 export default function Game() {
@@ -27,6 +27,7 @@ export default function Game() {
     if (paused) return;
     const interval = setInterval(() => {
       calculateGameTick(sr.current, speed);
+      unlockAchievements(sr.current);
       setTick(t => t + 1);
     }, 100);
     return () => clearInterval(interval);
@@ -93,7 +94,7 @@ export default function Game() {
       </header>
 
       <nav className="game-tabs">
-        {['buildings', 'research', 'resources', 'contracts', 'settings'].map(t => (
+        {['buildings', 'research', 'resources', 'contracts', 'achievements', 'settings'].map(t => (
           <button
             key={t}
             className={`tab ${tab === t ? 'active' : ''}`}
@@ -103,6 +104,7 @@ export default function Game() {
             {t === 'research' && '🔬 Araştırma'}
             {t === 'resources' && '📦 Kaynaklar'}
             {t === 'contracts' && '📋 Sözleşmeler'}
+            {t === 'achievements' && '🌟 Başarılar'}
             {t === 'settings' && '⚙️ Ayarlar'}
           </button>
         ))}
@@ -263,6 +265,25 @@ export default function Game() {
                   );
                 })}
               </div>
+            </div>
+          </div>
+        )}
+
+        {tab === 'achievements' && (
+          <div className="achievements-tab">
+            <h2>🌟 Başarılar</h2>
+            <div className="achievements-grid">
+              {ACHIEVEMENTS.map(a => {
+                const unlocked = (s.achievementsUnlocked || []).includes(a.id);
+                return (
+                  <div key={a.id} className={`achievement-card ${unlocked ? 'unlocked' : ''}`}>
+                    <div className="achievement-icon">{a.icon}</div>
+                    <div className="achievement-name">{a.name}</div>
+                    <div className="achievement-desc">{a.desc}</div>
+                    <div className="achievement-reward">{unlocked ? '✓ Tamamlandı' : `${fmtNum(a.reward)} TL`}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

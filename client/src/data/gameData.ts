@@ -66,6 +66,11 @@ export const ALL_BUILDINGS: Building[] = [
   { id: 'fuzyon_reaktoru', zone: 3, icon: '💥', name: 'Füzyon Reaktörü', cost: 8000, workers: 3, energyUse: 0, energyProd: 200, inputs: ['helyum3', 0.5], output: '', rate: 0, desc: 'Dev enerji üretir', workerWage: 150 },
   { id: 'orbital_solar', zone: 3, icon: '🌞', name: 'Orbital Güneş', cost: 12000, workers: 4, energyUse: 0, energyProd: 350, inputs: [], output: '', rate: 0, desc: 'Yörüngeden güneş enerjisi', workerWage: 200 },
   { id: 'uzay_ihale', zone: 3, icon: '🌌', name: 'Uzay İhale Merkezi', cost: 7000, workers: 6, energyUse: 8, energyProd: 0, inputs: ['uydu', 0.1], output: 'TL', rate: 1000, desc: 'Para üretir', workerWage: 110 },
+  { id: 'kuantum_bilgisayar', zone: 4, icon: '💻', name: 'Kuantum Bilgisayar', cost: 15000, workers: 10, energyUse: 50, energyProd: 0, inputs: [], output: 'veri', rate: 0.1, desc: 'Veri üretir', workerWage: 300 },
+  { id: 'yapay_zeka_lab', zone: 4, icon: '🤖', name: 'YZ Laboratuvarı', cost: 20000, workers: 15, energyUse: 60, energyProd: 0, inputs: ['veri', 10], output: 'RP', rate: 10, desc: 'RP üretir', workerWage: 400 },
+  { id: 'karadelik_reaktor', zone: 4, icon: '⚫', name: 'Kara Delik Reaktörü', cost: 50000, workers: 5, energyUse: 0, energyProd: 1000, inputs: [], output: '', rate: 0, desc: 'Sonsuz enerji', workerWage: 500 },
+  { id: 'multiverzum_portal', zone: 4, icon: '🔭', name: 'Multiverzum Portalı', cost: 100000, workers: 20, energyUse: 200, energyProd: 0, inputs: ['veri', 50], output: 'TL', rate: 10000, desc: 'Mega para', workerWage: 1000 },
+  { id: 'tanri_makine', zone: 5, icon: '🔥', name: 'İlahiyat Makinesi', cost: 500000, workers: 50, energyUse: 500, energyProd: 0, inputs: [], output: 'TL', rate: 100000, desc: 'Tanrısal para', workerWage: 5000 },
 ];
 
 export const RESEARCH_TREE = [
@@ -125,4 +130,24 @@ export const EXPEDITIONS: Expedition[] = [
   { id: 'e2', name: 'Uzak Keşif', desc: '%30 şansla 8000 TL', reward: 8000, chance: 0.3, icon: '🧭', zone: 1 },
   { id: 'e3', name: 'Deniz Yolculuğu', desc: '%40 şansla 15000 TL', reward: 15000, chance: 0.4, icon: '⛵', zone: 2 },
   { id: 'e4', name: 'Hazine Avı', desc: '%25 şansla 50000 TL', reward: 50000, chance: 0.25, icon: '💎', zone: 2 },
+];
+
+
+export interface Achievement {
+  id: string;
+  name: string;
+  desc: string;
+  icon: string;
+  reward: number;
+  condition: string;
+}
+
+export const ACHIEVEMENTS: Achievement[] = [
+  { id: 'a_first_building', name: 'İlk Bina', desc: 'İlk binayı inşa et', icon: '🏗️', reward: 500, condition: 'first_building' },
+  { id: 'a_100_buildings', name: '100 Bina', desc: '100 bina inşa et', icon: '🏢', reward: 5000, condition: 'buildings_100' },
+  { id: 'a_first_prestige', name: 'Prestige Ustası', desc: 'İlk prestige yap', icon: '✨', reward: 10000, condition: 'first_prestige' },
+  { id: 'a_zone_2', name: 'Sanayi Çağı', desc: 'Bölge 2\'ye ulaş', icon: '🏭', reward: 3000, condition: 'zone_2' },
+  { id: 'a_zone_3', name: 'Uzay Çağı', desc: 'Bölge 3\'e ulaş', icon: '🚀', reward: 10000, condition: 'zone_3' },
+  { id: 'a_1m_money', name: 'Milyoner', desc: '1 milyon TL kazan', icon: '💰', reward: 20000, condition: 'money_1m' },
+  { id: 'a_all_research', name: 'Bilim Ustası', desc: 'Tüm araştırmaları yap', icon: '🔬', reward: 15000, condition: 'all_research' },
 ];

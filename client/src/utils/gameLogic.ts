@@ -184,3 +184,39 @@ export function completeExpedition(s: GameState, expeditionId: string, reward: n
   }
   return false;
 }
+
+
+export function checkAchievements(s: GameState): string[] {
+  const newAchievements: string[] = [];
+  
+  if (s.totalBuildings >= 1 && !(s.achievementsUnlocked || []).includes('a_first_building')) {
+    newAchievements.push('a_first_building');
+  }
+  if (s.totalBuildings >= 100 && !(s.achievementsUnlocked || []).includes('a_100_buildings')) {
+    newAchievements.push('a_100_buildings');
+  }
+  if ((s.prestigeCount || 0) >= 1 && !(s.achievementsUnlocked || []).includes('a_first_prestige')) {
+    newAchievements.push('a_first_prestige');
+  }
+  if (s.zone >= 2 && !(s.achievementsUnlocked || []).includes('a_zone_2')) {
+    newAchievements.push('a_zone_2');
+  }
+  if (s.zone >= 3 && !(s.achievementsUnlocked || []).includes('a_zone_3')) {
+    newAchievements.push('a_zone_3');
+  }
+  if (s.money >= 1000000 && !(s.achievementsUnlocked || []).includes('a_1m_money')) {
+    newAchievements.push('a_1m_money');
+  }
+  
+  return newAchievements;
+}
+
+export function unlockAchievements(s: GameState): void {
+  const newAchievements = checkAchievements(s);
+  newAchievements.forEach(a => {
+    if (!(s.achievementsUnlocked || []).includes(a)) {
+      s.achievementsUnlocked = [...(s.achievementsUnlocked || []), a];
+      s.money += 5000; // Achievement reward
+    }
+  });
+}

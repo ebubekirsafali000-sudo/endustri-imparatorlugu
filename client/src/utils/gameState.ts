@@ -24,6 +24,7 @@ export interface GameState {
   prestigeBonus?: number;
   contractsCompleted?: string[];
   expeditionsCompleted?: string[];
+  achievementsUnlocked?: string[];
 }
 
 const SAVE_KEY = 'endInc_v6';
@@ -71,6 +72,7 @@ export function makeDefault(diff: string = 'normal'): GameState {
     prestigeBonus: 1,
     contractsCompleted: [],
     expeditionsCompleted: [],
+    achievementsUnlocked: [],
   };
 }
 
