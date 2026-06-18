@@ -788,3 +788,50 @@ h2 {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }
+
+
+/* Enhanced Research Styles */
+.research-info {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(168, 85, 247, 0.05);
+  border-radius: 6px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.research-card.secret {
+  opacity: 0.7;
+  border-color: #4a3555;
+}
+
+.research-card.tier-0 { border-left: 3px solid #00d4ff; }
+.research-card.tier-1 { border-left: 3px solid #39ff14; }
+.research-card.tier-2 { border-left: 3px solid #a855f7; }
+.research-card.tier-3 { border-left: 3px solid #ff6b35; }
+.research-card.tier-4 { border-left: 3px solid #ff3535; }
+.research-card.tier-5 { border-left: 3px solid #ffd700; }
+.research-card.tier-6 { border-left: 3px solid #ff00ff; }
+.research-card.tier-7 { border-left: 3px solid #00ffee; }
+.research-card.tier-8 { border-left: 3px solid #ff1493; }
+
+.unlock-btn.can {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(57, 255, 20, 0.1));
+  border-color: #39ff14;
+  color: #39ff14;
+}
+
+.unlock-btn.can:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(57, 255, 20, 0.2));
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+.unlock-btn.cant {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(100, 100, 100, 0.1);
+  border-color: #666;
+  color: #888;
+}

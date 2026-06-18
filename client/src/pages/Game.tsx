@@ -160,25 +160,37 @@ export default function Game() {
 
         {tab === 'research' && (
           <div className="research-tab">
-            <h2>🔬 Araştırma</h2>
+            <h2>🔬 Araştırma Ağacı</h2>
+            <div className="research-info">
+              <span>💡 Araştırma Puanı: {fmtNum(s.researchPoints)}</span>
+              <span>📚 Tamamlanan: {(s.researchUnlocked || []).length} / {RESEARCH_TREE.length}</span>
+            </div>
             <div className="research-grid">
               {RESEARCH_TREE.map(r => {
                 const done = (s.researchUnlocked || []).includes(r.id);
-                const canUnlock = s.researchPoints >= (r.cost || 0) && !done;
+                const reqMet = !r.req || (s.researchUnlocked || []).includes(r.req);
+                const zoneMet = (s.zone || 1) >= (r.zone || 1);
+                const canUnlock = s.researchPoints >= (r.cost || 0) && !done && reqMet && zoneMet;
+                const isRevealed = !r.secretCond || r.secretCond(s);
+                const isVisible = r.id === 'r_root' ? (s.zone || 1) >= 2 : reqMet || done;
+
+                if (!isVisible) return null;
+
                 return (
-                  <div key={r.id} className={`research-card ${done ? 'done' : ''}`}>
-                    <div className="research-icon">{r.icon}</div>
-                    <div className="research-name">{r.name}</div>
-                    <div className="research-desc">{r.desc}</div>
-                    {!done && <div className="research-cost">{fmtNum(r.cost || 0)} RP</div>}
+                  <div key={r.id} className={`research-card ${done ? 'done' : ''} ${!isRevealed ? 'secret' : ''} tier-${r.tier}`}>
+                    <div className="research-icon">{isRevealed ? r.icon : '❓'}</div>
+                    <div className="research-name">{isRevealed ? r.name : '???'}</div>
+                    <div className="research-desc">{isRevealed ? r.desc : 'Gizli araştırma...'}</div>
+                    {!done && isRevealed && <div className="research-cost">{fmtNum(r.cost || 0)} RP</div>}
+                    {!done && !isRevealed && <div className="research-cost">Kilitli</div>}
                     {done && <div className="research-status">✓ Tamamlandı</div>}
-                    {!done && (
+                    {!done && isRevealed && (
                       <button
-                        className="unlock-btn"
+                        className={`unlock-btn ${canUnlock ? 'can' : 'cant'}`}
                         onClick={() => handleUnlockResearch(r.id)}
                         disabled={!canUnlock}
                       >
-                        Araştır
+                        {!reqMet ? '⚠️ Ön Koşul' : !zoneMet ? '🔒 Bölge' : 'Araştır'}
                       </button>
                     )}
                   </div>

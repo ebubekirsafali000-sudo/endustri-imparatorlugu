@@ -73,18 +73,98 @@ export const ALL_BUILDINGS: Building[] = [
   { id: 'tanri_makine', zone: 5, icon: '🔥', name: 'İlahiyat Makinesi', cost: 500000, workers: 50, energyUse: 500, energyProd: 0, inputs: [], output: 'TL', rate: 100000, desc: 'Tanrısal para', workerWage: 5000 },
 ];
 
-export const RESEARCH_TREE = [
-  { id: 'r_root', tier: 0, icon: '🌱', name: 'Araştırma Kökü', desc: 'Araştırmaların başlangıcı', cost: 0, effect: 'none', value: 0, zone: 1 },
-  { id: 'r_prod1', tier: 1, icon: '📈', name: 'Üretim I', desc: 'Üretim +10%', cost: 100, effect: 'prodMulti', value: 0.1, zone: 1, req: 'r_root' },
-  { id: 'r_energy1', tier: 1, icon: '⚡', name: 'Enerji I', desc: 'Enerji +10%', cost: 150, effect: 'energyMulti', value: 0.1, zone: 1, req: 'r_root' },
-  { id: 'r_wage1', tier: 1, icon: '🤖', name: 'Otomasyon I', desc: 'İşçi ücreti -10%', cost: 120, effect: 'wageMulti', value: -0.1, zone: 1, req: 'r_root' },
+export interface ResearchNode {
+  id: string;
+  tier: number;
+  icon: string;
+  name: string;
+  desc: string;
+  cost: number;
+  effect: string;
+  value: number;
+  zone: number;
+  req?: string;
+  branch?: string;
+  secretCond?: (s: any) => boolean;
+}
+
+export const RESEARCH_TREE: ResearchNode[] = [
+  // ── Kök (Tier 0 · zone 2 · ücretsiz) ─────────────────────────
+  {id:'r_root',    tier:0,icon:'🧪',name:'Araştırma Merkezi', desc:'Araştırma ağacını aktive eder.',            cost:0,        effect:'none',       value:0,     zone:2},
+  // ── Tier 1  ·  req: r_root ────────────────────────────────────
+  {id:'r_prod1',   tier:1,icon:'⚙️',name:'Verimli Üretim I',      desc:'Tüm üretim +10%',             cost:500,      effect:'prodMulti',  value:0.10,  zone:2, req:'r_root'},
+  {id:'r_energy1', tier:1,icon:'⚡',name:'Enerji Opt. I',          desc:'Enerji tüketimi -10%',         cost:800,      effect:'energyMulti',value:-0.10, zone:2, req:'r_root'},
+  {id:'r_wage1',   tier:1,icon:'💸',name:'Otomasyon I',            desc:'İşçi ücretleri -10%',          cost:1200,     effect:'wageMulti',  value:-0.10, zone:2, req:'r_root'},
+  {id:'r_cap1',    tier:1,icon:'📦',name:'Depo Gen. I',            desc:'Kaynak kapasitesi +2000',       cost:1500,     effect:'capBonus',   value:2000,  zone:2, req:'r_root'},
+  {id:'r_xp1',     tier:1,icon:'⭐',name:'Hızlı Öğrenme',          desc:'XP kazanımı +25%',              cost:2000,     effect:'xpMulti',    value:0.25,  zone:2, req:'r_root'},
+  {id:'r_money1',  tier:1,icon:'💰',name:'Pazarlama I',            desc:'Para üretimi +20%',             cost:3000,     effect:'moneyMulti', value:0.20,  zone:2, req:'r_root'},
+  {id:'r_rp1',     tier:1,icon:'🔬',name:'Araştırma Hız. I',       desc:'RP üretimi +25%',               cost:4000,     effect:'rpMulti',    value:0.25,  zone:2, req:'r_root'},
+  // ── Tier 2 ────────────────────────────────────────────────────
+  {id:'r_prod2',   tier:2,icon:'⚙️',name:'Verimli Üretim II',      desc:'Tüm üretim +15%',             cost:5000,     effect:'prodMulti',  value:0.15,  zone:2, req:'r_prod1'},
+  {id:'r_energy2', tier:2,icon:'⚡',name:'Enerji Opt. II',          desc:'Enerji tüketimi -15%',         cost:6000,     effect:'energyMulti',value:-0.15, zone:2, req:'r_energy1'},
+  {id:'r_wage2',   tier:2,icon:'💸',name:'Otomasyon II',            desc:'İşçi ücretleri -15%',          cost:7000,     effect:'wageMulti',  value:-0.15, zone:2, req:'r_wage1'},
+  {id:'r_cap2',    tier:2,icon:'🏗️',name:'Depo Gen. II',           desc:'Kaynak kapasitesi +5000',       cost:9000,     effect:'capBonus',   value:5000,  zone:2, req:'r_cap1'},
+  {id:'r_xp2',     tier:2,icon:'🌟',name:'Süper Hafıza',            desc:'XP kazanımı +40%',              cost:11000,    effect:'xpMulti',    value:0.40,  zone:2, req:'r_xp1'},
+  {id:'r_money2',  tier:2,icon:'💵',name:'Küresel Pazar',           desc:'Para üretimi +30%',             cost:14000,    effect:'moneyMulti', value:0.30,  zone:2, req:'r_money1'},
+  {id:'r_rp2',     tier:2,icon:'🧬',name:'Araştırma Hız. II',       desc:'RP üretimi +50%',               cost:16000,    effect:'rpMulti',    value:0.50,  zone:3, req:'r_rp1'},
+  // ── Tier 3 ────────────────────────────────────────────────────
+  {id:'r_prod3',   tier:3,icon:'🏭',name:'Verimli Üretim III',      desc:'Tüm üretim +25%',             cost:25000,    effect:'prodMulti',  value:0.25,  zone:3, req:'r_prod2'},
+  {id:'r_energy3', tier:3,icon:'⚡',name:'Süper İletkenlik',         desc:'Enerji tüketimi -25%',         cost:28000,    effect:'energyMulti',value:-0.25, zone:3, req:'r_energy2'},
+  {id:'r_wage3',   tier:3,icon:'🤖',name:'Tam Otomasyon',           desc:'İşçi ücretleri -30%',          cost:32000,    effect:'wageMulti',  value:-0.30, zone:3, req:'r_wage2'},
+  {id:'r_cap3',    tier:3,icon:'🌐',name:'Sonsuz Depo',             desc:'Kaynak kapasitesi +15000',      cost:40000,    effect:'capBonus',   value:15000, zone:3, req:'r_cap2'},
+  {id:'r_rp3',     tier:3,icon:'🔭',name:'Kuantum Araştırma I',     desc:'RP üretimi +80%',               cost:35000,    effect:'rpMulti',    value:0.80,  zone:3, req:'r_rp2'},
+  // ── Tier 4 ────────────────────────────────────────────────────
+  {id:'r_prod4',   tier:4,icon:'🚀',name:'Verimli Üretim IV',       desc:'Tüm üretim +35%',             cost:80000,    effect:'prodMulti',  value:0.35,  zone:4, req:'r_prod3'},
+  {id:'r_wage4',   tier:4,icon:'🤖',name:'Nano-Otomasyon',          desc:'İşçi ücretleri -40%',          cost:120000,   effect:'wageMulti',  value:-0.40, zone:4, req:'r_wage3'},
+  {id:'r_cap4',    tier:4,icon:'🌌',name:'Boyutsuz Depo',           desc:'Kaynak kapasitesi +50000',      cost:150000,   effect:'capBonus',   value:50000, zone:4, req:'r_cap3'},
+  {id:'r_money3',  tier:4,icon:'💎',name:'Galaktik Finans',         desc:'Para üretimi +50%',             cost:100000,   effect:'moneyMulti', value:0.50,  zone:4, req:'r_money2'},
+  {id:'r_rp4',     tier:4,icon:'🧪',name:'Kuantum Araştırma II',    desc:'RP üretimi +120%',              cost:130000,   effect:'rpMulti',    value:1.20,  zone:4, req:'r_rp3'},
+  // ── Tier 5 ────────────────────────────────────────────────────
+  {id:'r_prod5',   tier:5,icon:'🌟',name:'Verimli Üretim V',        desc:'Tüm üretim +50%',             cost:500000,   effect:'prodMulti',  value:0.50,  zone:5, req:'r_prod4'},
+  {id:'r_energy4', tier:5,icon:'♾️',name:'Sonsuz Enerji Opt.',      desc:'Enerji tüketimi -40%',         cost:600000,   effect:'energyMulti',value:-0.40, zone:5, req:'r_energy3'},
+  {id:'r_money4',  tier:5,icon:'💰',name:'Kozmik Finans',           desc:'Para üretimi +75%',             cost:700000,   effect:'moneyMulti', value:0.75,  zone:5, req:'r_money3'},
+  {id:'r_rp5',     tier:5,icon:'🌌',name:'Kuantum Araştırma III',   desc:'RP üretimi +200%',              cost:800000,   effect:'rpMulti',    value:2.00,  zone:5, req:'r_rp4'},
+  // ── Tier 6 ────────────────────────────────────────────────────
+  {id:'r_prod6',   tier:6,icon:'👁️',name:'Tanrısal Üretim',         desc:'Tüm üretim +100%',            cost:5000000,  effect:'prodMulti',  value:1.00,  zone:6, req:'r_prod5'},
+  {id:'r_wage5',   tier:6,icon:'♾️',name:'Mutlak Otomasyon',        desc:'İşçi ücretleri -60%',          cost:9000000,  effect:'wageMulti',  value:-0.60, zone:6, req:'r_wage4'},
+  {id:'r_cap5',    tier:6,icon:'🕳️',name:'Karadelik Deposu',        desc:'Kaynak kapasitesi +200000',     cost:7000000,  effect:'capBonus',   value:200000,zone:7, req:'r_cap4'},
+  {id:'r_xp3',     tier:6,icon:'💫',name:'Tanrısal Öğrenme',        desc:'XP kazanımı +100%',             cost:12000000, effect:'xpMulti',    value:1.00,  zone:6, req:'r_xp2'},
+  {id:'r_money5',  tier:6,icon:'🌌',name:'Evren Ekonomisi',         desc:'Para üretimi +100%',            cost:8000000,  effect:'moneyMulti', value:1.00,  zone:6, req:'r_money4'},
+  {id:'r_rp6',     tier:6,icon:'👁️',name:'Tanrısal Araştırma',      desc:'RP üretimi +500%',              cost:15000000, effect:'rpMulti',    value:5.00,  zone:7, req:'r_rp5'},
+  {id:'r_prod7',   tier:7,icon:'♾️',name:'Paralel Üretim',          desc:'Tüm üretim +200%',            cost:50000000, effect:'prodMulti',  value:2.00,  zone:8, req:'r_prod6'},
+  // ── GİZLİ ARAŞTIRMALAR ─────────────────────────────────────────
+  {id:'r_gizli1',  tier:7,icon:'🌑',name:'Karanlık Madde',
+   desc:'Tüm üretim +150%. Karanlık enerji akışını hissediyorsun...',
+   cost:3000000, effect:'prodMulti', value:1.50, zone:5,
+   secretCond:(s)=>(s.zone||1)>=5 && (s.level||1)>=12},
+  {id:'r_gizli2',  tier:7,icon:'💀',name:'Sonsuz Birikim',
+   desc:'Para üretimi +250%. Ekonominin ötesinde bir güç var.',
+   cost:8000000, effect:'moneyMulti',value:2.50, zone:6,
+   secretCond:(s)=>(s.money||0)>=50000000 && (s.researchUnlocked||[]).length>=15},
+  {id:'r_gizli3',  tier:8,icon:'🌌',name:'Omega Sentezi',
+   desc:'Tüm çarpanlar +300%. İmparatorluğunun nihai ve gizli formu.',
+   cost:50000000,effect:'prodMulti', value:3.00, zone:7,
+   secretCond:(s)=>(s.researchUnlocked||[]).includes('r_gizli1')&&(s.researchUnlocked||[]).includes('r_gizli2')},
 ];
 
 export const RPOS: Record<string, { col: number; row: number }> = {
-  r_root: { col: 3, row: 0 },
-  r_prod1: { col: 0, row: 1 },
-  r_energy1: { col: 1, row: 1 },
-  r_wage1: { col: 2, row: 1 },
+  r_root:   {col:3,row:0},
+  r_prod1:  {col:0,row:1}, r_energy1:{col:1,row:1}, r_wage1: {col:2,row:1},
+  r_cap1:   {col:3,row:1}, r_xp1:    {col:4,row:1}, r_money1:{col:5,row:1}, r_rp1:   {col:6,row:1},
+  r_prod2:  {col:0,row:2}, r_energy2:{col:1,row:2}, r_wage2: {col:2,row:2},
+  r_cap2:   {col:3,row:2}, r_xp2:    {col:4,row:2}, r_money2:{col:5,row:2}, r_rp2:   {col:6,row:2},
+  r_prod3:  {col:0,row:3}, r_energy3:{col:1,row:3}, r_wage3: {col:2,row:3},
+  r_cap3:   {col:3,row:3},                                                   r_rp3:   {col:6,row:3},
+  r_prod4:  {col:0,row:4},                           r_wage4: {col:2,row:4},
+  r_cap4:   {col:3,row:4},                           r_money3:{col:5,row:4}, r_rp4:   {col:6,row:4},
+  r_prod5:  {col:0,row:5}, r_energy4:{col:1,row:5},
+                                                      r_money4:{col:5,row:5}, r_rp5:   {col:6,row:5},
+  r_prod6:  {col:0,row:6},                           r_wage5: {col:2,row:6},
+  r_cap5:   {col:3,row:6}, r_xp3:    {col:4,row:6}, r_money5:{col:5,row:6}, r_rp6:   {col:6,row:6},
+  r_prod7:  {col:0,row:7},
+  r_gizli1: {col:1,row:7},
+  r_gizli2: {col:5,row:7},
+  r_gizli3: {col:3,row:8},
 };
 
 export const EFFECT_META: Record<string, { color: string; label: string }> = {
@@ -186,36 +266,11 @@ export interface Tournament {
   desc: string;
   icon: string;
   duration: number; // seconds
-  rewards: { money: number; rp: number; xp: number };
-  criteria: string; // 'money', 'level', 'production'
+  rewards: { money: number; xp: number };
 }
 
 export const TOURNAMENTS: Tournament[] = [
-  {
-    id: 'weekly_money',
-    name: 'Haftalık Para Yarışması',
-    desc: 'En fazla para kazanan kazanır!',
-    icon: '💰',
-    duration: 604800, // 1 week
-    rewards: { money: 100000, rp: 5000, xp: 10000 },
-    criteria: 'money',
-  },
-  {
-    id: 'monthly_level',
-    name: 'Aylık Level Yarışması',
-    desc: 'En yüksek seviyeye ulaşan kazanır!',
-    icon: '📊',
-    duration: 2592000, // 1 month
-    rewards: { money: 500000, rp: 20000, xp: 50000 },
-    criteria: 'level',
-  },
-  {
-    id: 'daily_production',
-    name: 'Günlük Üretim Yarışması',
-    desc: 'En fazla üretim yapan kazanır!',
-    icon: '🏭',
-    duration: 86400, // 1 day
-    rewards: { money: 50000, rp: 2000, xp: 5000 },
-    criteria: 'production',
-  },
+  { id: 't_weekly_money', name: 'Haftalık Para Yarışı', desc: 'En fazla para kazananlar', icon: '💰', duration: 604800, rewards: { money: 50000, xp: 1000 } },
+  { id: 't_monthly_level', name: 'Aylık Seviye Yarışı', desc: 'En yüksek seviyeye ulaşanlar', icon: '📊', duration: 2592000, rewards: { money: 100000, xp: 5000 } },
+  { id: 't_daily_production', name: 'Günlük Üretim Yarışı', desc: 'En fazla bina yapanlar', icon: '🏭', duration: 86400, rewards: { money: 10000, xp: 500 } },
 ];

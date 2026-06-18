@@ -2,16 +2,63 @@ import { GameState } from './gameState';
 import { ALL_BUILDINGS, ZONE_INFO } from '../data/gameData';
 
 export function getResearchBonuses(s: GameState) {
-  let prodMulti = 0, energyMulti = 0, wageMulti = 0, xpMulti = 0, moneyMulti = 0, rpMulti = 0;
+  let prodMulti = 0, energyMulti = 0, wageMulti = 0, xpMulti = 0, moneyMulti = 0, rpMulti = 0, capBonus = 0;
   
   (s.researchUnlocked || []).forEach(rid => {
+    // Production bonuses
     if (rid === 'r_prod1') prodMulti += 0.1;
+    if (rid === 'r_prod2') prodMulti += 0.15;
+    if (rid === 'r_prod3') prodMulti += 0.25;
+    if (rid === 'r_prod4') prodMulti += 0.35;
+    if (rid === 'r_prod5') prodMulti += 0.5;
+    if (rid === 'r_prod6') prodMulti += 1.0;
+    if (rid === 'r_prod7') prodMulti += 2.0;
+    if (rid === 'r_gizli1') prodMulti += 1.5;
+    if (rid === 'r_gizli3') prodMulti += 3.0;
+    
+    // Energy bonuses
     if (rid === 'r_energy1') energyMulti += 0.1;
+    if (rid === 'r_energy2') energyMulti += 0.2;
+    if (rid === 'r_energy3') energyMulti += 0.3;
+    if (rid === 'r_energy4') energyMulti += 0.5;
+    
+    // Wage reduction (negative = better)
     if (rid === 'r_wage1') wageMulti -= 0.1;
-    if (rid === 'r_xp1') xpMulti += 0.2;
+    if (rid === 'r_wage2') wageMulti -= 0.15;
+    if (rid === 'r_wage3') wageMulti -= 0.3;
+    if (rid === 'r_wage4') wageMulti -= 0.4;
+    if (rid === 'r_wage5') wageMulti -= 0.6;
+    
+    // XP bonuses
+    if (rid === 'r_xp1') xpMulti += 0.25;
+    if (rid === 'r_xp2') xpMulti += 0.4;
+    if (rid === 'r_xp3') xpMulti += 1.0;
+    
+    // Money bonuses
+    if (rid === 'r_money1') moneyMulti += 0.2;
+    if (rid === 'r_money2') moneyMulti += 0.3;
+    if (rid === 'r_money3') moneyMulti += 0.5;
+    if (rid === 'r_money4') moneyMulti += 0.75;
+    if (rid === 'r_money5') moneyMulti += 1.0;
+    if (rid === 'r_gizli2') moneyMulti += 2.5;
+    
+    // Research points bonuses
+    if (rid === 'r_rp1') rpMulti += 0.25;
+    if (rid === 'r_rp2') rpMulti += 0.5;
+    if (rid === 'r_rp3') rpMulti += 0.8;
+    if (rid === 'r_rp4') rpMulti += 1.2;
+    if (rid === 'r_rp5') rpMulti += 2.0;
+    if (rid === 'r_rp6') rpMulti += 5.0;
+    
+    // Capacity bonuses
+    if (rid === 'r_cap1') capBonus += 2000;
+    if (rid === 'r_cap2') capBonus += 5000;
+    if (rid === 'r_cap3') capBonus += 15000;
+    if (rid === 'r_cap4') capBonus += 50000;
+    if (rid === 'r_cap5') capBonus += 200000;
   });
 
-  return { prodMulti, energyMulti, wageMulti, xpMulti, moneyMulti, rpMulti, capBonus: 0 };
+  return { prodMulti, energyMulti, wageMulti, xpMulti, moneyMulti, rpMulti, capBonus };
 }
 
 export function getBuildingUpgradeMult(s: GameState, buildingId: string): number {
@@ -93,8 +140,13 @@ export function calculateGameTick(s: GameState, deltaTime: number = 1) {
     }
   });
 
+  // Apply RP multiplier
+  if (totalOutput['RP']) {
+    s.researchPoints += (totalOutput['RP'] * (1 + bonuses.rpMulti)) - (totalOutput['RP'] || 0);
+  }
+
   // Passive XP gain
-  s.xp += (0.1 * (s.bldCounts['arastirma_lab'] || 0)) * xpMult * deltaTime;
+  s.xp += (0.1 * (s.bldCounts['arastirma_lab'] || 0)) * (1 + bonuses.xpMulti) * xpMult * deltaTime;
 
   // Level up
   const XP_PER_LEVEL = (level: number) => 100 * Math.pow(1.15, level - 1);
@@ -145,9 +197,16 @@ export function sellBuilding(s: GameState, buildingId: string): boolean {
 export function unlockResearch(s: GameState, researchId: string): boolean {
   if ((s.researchUnlocked || []).includes(researchId)) return false;
 
-  // Find cost (placeholder)
-  const cost = 100;
+  // Import RESEARCH_TREE to get actual cost
+  const { RESEARCH_TREE } = require('../data/gameData');
+  const research = RESEARCH_TREE.find((r: any) => r.id === researchId);
+  if (!research) return false;
+
+  const cost = research.cost || 0;
   if (s.researchPoints < cost) return false;
+
+  // Check prerequisites
+  if (research.req && !s.researchUnlocked.includes(research.req)) return false;
 
   s.researchPoints -= cost;
   s.researchUnlocked.push(researchId);
