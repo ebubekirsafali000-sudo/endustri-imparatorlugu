@@ -835,3 +835,32 @@ h2 {
   border-color: #666;
   color: #888;
 }
+
+
+/* Zone Based Background Themes */
+.game-container {
+  background-size: cover;
+  background-position: center;
+  transition: background 1s ease-in-out;
+}
+
+.zone-1-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone1.jpg'); }
+.zone-2-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone2.jpg'); }
+.zone-3-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone3.jpg'); }
+.zone-4-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone4.jpg'); }
+.zone-5-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone5.jpg'); }
+.zone-6-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone6.jpg'); }
+.zone-7-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone7.jpg'); }
+.zone-8-theme { background-image: linear-gradient(rgba(10, 21, 32, 0.8), rgba(10, 21, 32, 0.8)), url('/assets/bg/zone8.jpg'); }
+
+/* Video Background Support */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.4;
+}

@@ -74,7 +74,7 @@ export default function Game() {
   const zoneBuildings = useMemo(() => ALL_BUILDINGS.filter(b => b.zone === s.zone), [s.zone]);
 
   return (
-    <div className="game-container">
+    <div className={`game-container zone-${s.zone || 1}-theme`}>
       <header className="game-header">
         <div className="header-title">🏭 Endüstri İmparatorluğu</div>
         <div className="header-stats">
