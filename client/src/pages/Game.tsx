@@ -3,7 +3,7 @@ import '../styles/game.css';
 
 import { DIFFICULTIES, ZONE_INFO, ALL_BUILDINGS, RESEARCH_TREE, CONTRACTS, EXPEDITIONS, ACHIEVEMENTS } from '../data/gameData';
 import { makeDefault, doSave, doLoad, GameState } from '../utils/gameState';
-import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige, completeContract, completeExpedition, unlockAchievements } from '../utils/gameLogic';
+import { calculateGameTick, buyBuilding, sellBuilding, unlockResearch, checkZoneAdvance, doPrestige, completeContract, completeExpedition, unlockAchievements, sellResource, buyResource, getMarketStats } from '../utils/gameLogic';
 import { fmtNum, fmtRate, XP_PER_LEVEL } from '../utils/formatters';
 
 export default function Game() {
@@ -94,7 +94,7 @@ export default function Game() {
       </header>
 
       <nav className="game-tabs">
-        {['buildings', 'research', 'resources', 'contracts', 'achievements', 'settings'].map(t => (
+        {        ['buildings', 'research', 'resources', 'contracts', 'achievements', 'market', 'settings'].map(t => (
           <button
             key={t}
             className={`tab ${tab === t ? 'active' : ''}`}
@@ -105,6 +105,7 @@ export default function Game() {
             {t === 'resources' && '📦 Kaynaklar'}
             {t === 'contracts' && '📋 Sözleşmeler'}
             {t === 'achievements' && '🌟 Başarılar'}
+            {t === 'market' && '💹 Pazar'}
             {t === 'settings' && '⚙️ Ayarlar'}
           </button>
         ))}
@@ -362,6 +363,48 @@ export default function Game() {
               <button className="reset-btn" onClick={handleReset}>
                 🔄 Oyunu Sıfırla
               </button>
+            </div>
+          </div>
+        )}
+        {tab === 'market' && (
+          <div className="market-tab">
+            <h2>💹 Pazar - Kaynakları Al/Sat</h2>
+            <div className="market-grid">
+              {Object.entries(s.resources || {}).map(([res, amount]) => {
+                const stats = getMarketStats(s);
+                const stat = stats[res];
+                if (!stat) return null;
+                return (
+                  <div key={res} className="market-item">
+                    <div className="market-header">
+                      <span className="market-name">{res.toUpperCase()}</span>
+                      <span className="market-trend">{stat.trend}</span>
+                    </div>
+                    <div className="market-stats">
+                      <div>Sahip: <strong>{fmtNum(amount)}</strong></div>
+                      <div>Fiyat: <strong>{fmtNum(stat.price)} TL</strong></div>
+                    </div>
+                    <div className="market-actions">
+                      <button className="sell-resource-btn" onClick={() => {
+                        if (sellResource(s, res, 1)) {
+                          doSave(s);
+                          setTick(t => t + 1);
+                        }
+                      }}>
+                        Sat (1)
+                      </button>
+                      <button className="buy-resource-btn" onClick={() => {
+                        if (buyResource(s, res, 1)) {
+                          doSave(s);
+                          setTick(t => t + 1);
+                        }
+                      }}>
+                        Al (1)
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

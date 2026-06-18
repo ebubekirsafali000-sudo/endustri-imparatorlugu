@@ -228,3 +228,42 @@ export function unlockAchievements(s: GameState): void {
     }
   });
 }
+
+
+export function sellResource(s: GameState, resourceName: string, amount: number): boolean {
+  const available = s.resources[resourceName] || 0;
+  if (available < amount) return false;
+  
+  const price = getMarketPrice(s, resourceName);
+  const totalMoney = amount * price;
+  
+  s.resources[resourceName] = available - amount;
+  s.money += totalMoney;
+  
+  return true;
+}
+
+export function buyResource(s: GameState, resourceName: string, amount: number): boolean {
+  const price = getMarketPrice(s, resourceName);
+  const totalCost = amount * price;
+  
+  if (s.money < totalCost) return false;
+  
+  s.money -= totalCost;
+  s.resources[resourceName] = (s.resources[resourceName] || 0) + amount;
+  
+  return true;
+}
+
+export function getMarketStats(s: GameState): Record<string, { price: number; trend: string }> {
+  const resources = ['demir', 'komur', 'kereste', 'bakir', 'tas', 'kil', 'celik', 'kablo', 'tahta', 'cimento', 'altin', 'petrol', 'plastik', 'lojistik', 'RP'];
+  const stats: Record<string, { price: number; trend: string }> = {};
+  
+  resources.forEach(res => {
+    const price = getMarketPrice(s, res);
+    const trend = Math.random() > 0.5 ? '📈' : '📉';
+    stats[res] = { price, trend };
+  });
+  
+  return stats;
+}

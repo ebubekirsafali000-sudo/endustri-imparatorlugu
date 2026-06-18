@@ -177,3 +177,45 @@ export const ZONE_6_BUILDINGS: Building[] = [
   { id: 'time_manipulator', zone: 7, icon: '⏰', name: 'Zaman Manipülatörü', cost: 10000000, workers: 200, energyUse: 5000, energyProd: 0, inputs: [], output: 'TL', rate: 1000000, desc: 'Zamanı kontrol et', workerWage: 50000 },
   { id: 'universe_factory', zone: 8, icon: '🌌', name: 'Evren Fabrikası', cost: 100000000, workers: 500, energyUse: 10000, energyProd: 0, inputs: [], output: 'TL', rate: 10000000, desc: 'Evrenleri üret', workerWage: 100000 },
 ];
+
+
+// Tournament system
+export interface Tournament {
+  id: string;
+  name: string;
+  desc: string;
+  icon: string;
+  duration: number; // seconds
+  rewards: { money: number; rp: number; xp: number };
+  criteria: string; // 'money', 'level', 'production'
+}
+
+export const TOURNAMENTS: Tournament[] = [
+  {
+    id: 'weekly_money',
+    name: 'Haftalık Para Yarışması',
+    desc: 'En fazla para kazanan kazanır!',
+    icon: '💰',
+    duration: 604800, // 1 week
+    rewards: { money: 100000, rp: 5000, xp: 10000 },
+    criteria: 'money',
+  },
+  {
+    id: 'monthly_level',
+    name: 'Aylık Level Yarışması',
+    desc: 'En yüksek seviyeye ulaşan kazanır!',
+    icon: '📊',
+    duration: 2592000, // 1 month
+    rewards: { money: 500000, rp: 20000, xp: 50000 },
+    criteria: 'level',
+  },
+  {
+    id: 'daily_production',
+    name: 'Günlük Üretim Yarışması',
+    desc: 'En fazla üretim yapan kazanır!',
+    icon: '🏭',
+    duration: 86400, // 1 day
+    rewards: { money: 50000, rp: 2000, xp: 5000 },
+    criteria: 'production',
+  },
+];

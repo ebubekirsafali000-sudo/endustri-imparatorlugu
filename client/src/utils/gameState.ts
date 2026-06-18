@@ -150,3 +150,18 @@ export function triggerRandomEvent(s: GameState): void {
     doSave(s);
   }
 }
+
+
+export function joinTournament(s: GameState, tournamentId: string): void {
+  if (!s.eventHistory) s.eventHistory = [];
+  s.eventHistory.push(`${tournamentId} turnuvasına katıldın!`);
+  doSave(s);
+}
+
+export function getTournamentStatus(s: GameState): Record<string, { score: number; rank: number }> {
+  return {
+    weekly_money: { score: s.money, rank: Math.floor(Math.random() * 100) + 1 },
+    monthly_level: { score: s.level, rank: Math.floor(Math.random() * 500) + 1 },
+    daily_production: { score: s.totalBuildings, rank: Math.floor(Math.random() * 200) + 1 },
+  };
+}
